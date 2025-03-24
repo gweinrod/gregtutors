@@ -15,7 +15,7 @@ export function Authenticator({ children, context }) {
     
     if (token) {
       //Client side update authentication
-      fetch('/api/validate-token', { headers: { Authorization: `Bearer ${token}` } })
+      fetch('/api/token', { headers: { Authorization: `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => { if (data.user) { setUser(data.user); }
                       else { setUser(null); }})
