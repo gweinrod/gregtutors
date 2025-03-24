@@ -113,7 +113,7 @@ export async function fillContext(context) {
   try {
     // TODO: write token authentication microservice / private endpoint
     // TODO: code a placeholder login success account name, password, admin:admin
-    const response = await fetch(`${process.env.API_URL}/api/validate-token`, {
+    const response = await fetch(`${process.env.API_URL}/api/token`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
