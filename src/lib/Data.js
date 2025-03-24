@@ -49,11 +49,11 @@ class Data {
     }
   }
   
-  //Fetch Schedule data for a user
+  //Fetch scheduling access
   //@param {Object} user - User object
   //@param {Object} context - Next.js context object
   //@returns {Promise<Object|null>} - Scheduler data or null
-  async getSchedule(user, context) {
+  async hasAccess(user, context) {
     if (!user || !user.id) return null;
     
     try {
@@ -62,7 +62,7 @@ class Data {
       if (!token) return null;
       
       const response = await fetch(
-        `${this.apiUrl}/api/getscheduler?userId=${user.id}`,
+        `${this.apiUrl}/api/getaccess?userId=${user.id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -94,7 +94,7 @@ class Data {
     ]);
     
     //Fetch Schedule if authenticated
-    const schedule = user ? await this.getSchedule(user, context) : null;
+    const schedule = user ? await this.hasAccess(user, context) : null;
     
     return {
       reviews,
