@@ -98,7 +98,7 @@ export async function getServerSideProps(context) {
     };
   }
   
-  // User is logged in, get the calendar
+  // User is logged in, get their calendar
   const schedule = await Data.api.getSchedule(user, context);
   
   // Return props to the page
