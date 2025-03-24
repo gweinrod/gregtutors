@@ -1,0 +1,13 @@
+import React from 'react';
+
+//about section of promotional material
+const About = () => {
+  return (
+    <section id="about" className="about">
+      <h2>{process.env.ABOUT || ""}</h2>
+      <p>{process.env.ABOUT_TEXT || ""}</p>
+    </section>
+  );
+};
+
+export default About;
