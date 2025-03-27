@@ -14,10 +14,10 @@ export default function Classes({ schedule }) {
   const router = useRouter();
   const { user, logout, context } = updateContext();
 
-  // Users not logged in are redirected to the home page, client side redirect
+  // Users not logged in are redirected to the home page by their own client's redirect
   if (!user && typeof window !== 'undefined') {
     router.push('/');
-    return null; // Don't render anything while redirecting
+    return null; // Render while redirect fix
   }
 
   // Logged in users are shown the calendar of classes, but only those with permission set in the database have a schedule class link rendered
@@ -108,3 +108,14 @@ export async function getServerSideProps(context) {
     }
   };
 }
+
+/*
+export async function getStaticProps() {
+  // Return empty schedule for static build
+  return {
+    props: { 
+      schedule: null
+    }
+  };
+}
+*/
