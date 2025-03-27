@@ -6,10 +6,10 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="copyright">
-        © {currentYear} {process.env.SITE_TITLE || ""} - All Rights Reserved
+        © {currentYear} {process.env.NEXT_PUBLIC_SITE_TITLE || ""} - All Rights Reserved
       </div>
       <div className="contact">
-        Greg - <a href={`mailto:${process.env.CONTACT_EMAIL || ""}`}>Contact me</a>
+        Greg - <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || ""}`}>Contact me</a>
       </div>
     </footer>
   );

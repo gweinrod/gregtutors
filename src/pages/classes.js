@@ -48,21 +48,21 @@ export default function Classes({ schedule }) {
                   <p>{schedule.message}</p>
                   <div className="scheduler-links">
                     <a 
-                      href={process.env.CALENDAR_URL || schedule.calendarUrl} 
+                      href={process.env.NEXT_PUBLIC_CALENDAR_URL || schedule.calendarUrl} 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="button"
                     >
-                      {process.env.SCHEDULE_SESSION_TEXT || "Schedule a Session"}
+                      {process.env.NEXT_PUBLIC_SCHEDULE_SESSION_TEXT || "Schedule a Session"}
                     </a>
                     {schedule.paymentUrl && (
                       <a 
-                        href={process.env.PAYMENT_URL || schedule.paymentUrl} 
+                        href={process.env.NEXT_PUBLIC_PAYMENT_URL || schedule.paymentUrl} 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         className="button"
                       >
-                        {process.env.PAYMENT_TEXT || "Make a Payment"}
+                        {process.env.NEXT_PUBLIC_PAYMENT_TEXT || "Make a Payment"}
                       </a>
                     )}
                   </div>

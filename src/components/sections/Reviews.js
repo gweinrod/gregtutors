@@ -3,9 +3,9 @@ import React from 'react';
 //Reviews portion of promotional material
 const Reviews = ({ reviews }) => {
   const defaultReviews = [
-    { quote: process.env.REVIEW_1 || "", client: process.env.REVIEWER_1 || "" },
-    { quote: process.env.REVIEW_2 || "", client: process.env.REVIEWER_2 || "" },
-    { quote: process.env.REVIEW_3 || "", client: process.env.REVIEWER_3 || "" }
+    { quote: process.env.NEXT_PUBLIC_REVIEW_1 || "", client: process.env.NEXT_PUBLIC_REVIEWER_1 || "" },
+    { quote: process.env.NEXT_PUBLIC_REVIEW_2 || "", client: process.env.NEXT_PUBLIC_REVIEWER_2 || "" },
+    { quote: process.env.NEXT_PUBLIC_REVIEW_3 || "", client: process.env.NEXT_PUBLIC_REVIEWER_3 || "" }
   ];
 
   return (
