@@ -77,3 +77,14 @@ export async function getServerSideProps(context) {
     }
   };
 }
+
+/*
+export async function getStaticProps() {
+  // Return empty schedule for static build
+  return {
+    props: { 
+      schedule: null
+    }
+  };
+  }
+  */
