@@ -4,8 +4,8 @@ import React from 'react';
 const About = () => {
   return (
     <section id="about" className="about">
-      <h2>{process.env.ABOUT || ""}</h2>
-      <p>{process.env.ABOUT_TEXT || ""}</p>
+      <h2>{process.env.NEXT_PUBLIC_ABOUT || ""}</h2>
+      <p>{process.env.NEXT_PUBLIC_ABOUT_TEXT || ""}</p>
     </section>
   );
 };

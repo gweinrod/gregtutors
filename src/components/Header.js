@@ -9,35 +9,18 @@ const Header = ({ user, openModal, logout, theme, page }) => {
   return (
     <header className={`site-header ${theme}`}>
       <div className="logo">
-        <Link href="/" passHref>
-          <a>Greg Tutors</a>
-        </Link>
+        <Link href="/" passHref>Greg Tutors</Link>
       </div>
       
       <nav className="main-nav">
         <ul>
           <li>
-            <Link href="/#about" passHref>
-              <a className={router.pathname === '/' ? 'active' : ''}>About</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/#info" passHref>
-              <a>Info</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/#reviews" passHref>
-              <a>Reviews</a>
-            </Link>
-          </li>
-          <li>
-            <a href="https://calendar.google.com/..." target="_blank" rel="noopener noreferrer">
+            <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1--meUbXKA2NolTHv1GRyNIC7PzpJhRHrVeJfm5HpptANsZhB6r3mlLPpcKAxB3PfyayMWzmR0" target="_blank" rel="noopener noreferrer">
               Schedule
             </a>
           </li>
           <li>
-            <a href="https://forms.google.com/..." target="_blank" rel="noopener noreferrer">
+            <a href="https://docs.google.com/forms/d/1lxRlkC5CUUhBPAGlBGpmEx5Lg_WiHPM4Axlmnae5FNg/" target="_blank" rel="noopener noreferrer">
               Contact
             </a>
           </li>
@@ -45,9 +28,7 @@ const Header = ({ user, openModal, logout, theme, page }) => {
           {/* Only show Classes link if user is logged in */}
           {user && (
             <li>
-              <Link href="/classes" passHref>
-                <a className={router.pathname === '/classes' ? 'active' : ''}>Classes</a>
-              </Link>
+              <Link href="/classes" passHref className={router.pathname === '/classes' ? 'active' : ''}>Classes</Link>
             </li>
           )}
         </ul>

@@ -30,7 +30,7 @@ export default function Home({ reviews, quotes, schedule }) {
     <div className="page-container">
       <Head>
         <title>{context.siteTitle}</title>
-        <meta name="description" content={process.env.SITE_DESCRIPTION || ""} />
+        <meta name="description" content={process.env.NEXT_PUBLIC_SITE_DESCRIPTION || ""} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header 

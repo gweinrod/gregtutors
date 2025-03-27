@@ -4,7 +4,7 @@ import '../styles/globals.css';
 
 function App({ Component, pageProps }) {
   const [theme, setTheme] = useState('light');
-  const context = { theme, setTheme, siteTitle: process.env.SITE_TITLE || "" };
+  const context = { theme, setTheme, siteTitle: process.env.NEXT_PUBLIC_SITE_TITLE || "" };
 
   return (
     <Authenticator context={context}>
