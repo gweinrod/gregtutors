@@ -1,0 +1,17 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    //output: 'standalone',
+    //skipMiddlewareUrlNormalize: true,
+    //skipTrailingSlashRedirect: true,
+    reactStrictMode: true
+
+    /*
+    experimental: {
+	appDir: false,
+	disableOptimizedLoading: true
+	},
+    */
+
+    
+    
+}
