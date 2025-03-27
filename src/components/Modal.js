@@ -17,6 +17,8 @@ const Modal = ({ onClose, login }) => {
       
       if (result.error) {
         setError(result.error);
+      } else if (result.success) {
+	  onClose();
       }
     } catch (err) {
       setError('An unexpected error occurred');

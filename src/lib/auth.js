@@ -69,7 +69,7 @@ export function Authenticator({ children, context }) {
       setUser(null);
       
       //Route to Home
-      if (router.pathname === '/classes') {
+	if (router.pathname !== '/') {
         router.replace('/');
       }
     } catch (error) {

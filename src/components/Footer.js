@@ -9,7 +9,7 @@ const Footer = () => {
         © {currentYear} {process.env.NEXT_PUBLIC_SITE_TITLE || ""} - All Rights Reserved
       </div>
       <div className="contact">
-        Greg - <a href={`mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL || ""}`}>Contact me</a>
+        Greg - <a href="https://docs.google.com/forms/d/1lxRlkC5CUUhBPAGlBGpmEx5Lg_WiHPM4Axlmnae5FNg">Contact me</a>
       </div>
     </footer>
   );

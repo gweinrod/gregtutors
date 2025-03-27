@@ -34,16 +34,7 @@ const Contact = ({ user, schedule }) => {
       </div>
     );
   };
-
-  return (
-    <section id="contact-info" className="contact">
-      <h2>{process.env.NEXT_PUBLIC_NEW_STUDENTS_TITLE || ""}</h2>
-      <p>Inquire <a href={process.env.NEXT_PUBLIC_INQUIRE_URL || ""} target="_blank" rel="noopener noreferrer">here</a></p>
-      
-      <h2>{process.env.NEXT_PUBLIC_CURRENT_STUDENTS_TITLE || ""}</h2>
-      {user ? render() : <p>{process.env.NEXT_PUBLIC_LOGIN_PROMPT || ""}</p>}
-    </section>
-  );
+    
 };
 
 export default Contact;
