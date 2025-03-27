@@ -17,6 +17,27 @@ export default async function handler(req, res) {
   }
   
   try {
+    // Check if credentials have been leaked
+    let passwordLeaked = false;
+    try {
+      const pldResponse = await fetch('http://localhost:8080/createAssessment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: email,
+          password
+        })
+      });
+
+      if (pldResponse.ok) {
+        const pldData = await pldResponse.json();
+        passwordLeaked = (pldData.leakedStatus === 'LEAKED');
+      }
+    } catch (pldError) {
+      console.error('Error checking credentials with PLD service:', pldError);
+    }
     
     // TODO: Password validation microservice, remove dummy case
     const isValid = email === 'test@example.com' && password === 'password123';
@@ -45,7 +66,8 @@ export default async function handler(req, res) {
     
     return res.status(200).json({
       user,
-      token
+      token,
+      warning: passwordLeaked ? 'Your password appears in a data breach. For security, we recommend changing your password.' : null
     });
   } catch (error) {
     console.error('Login error:', error);
