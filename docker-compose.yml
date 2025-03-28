@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  gregtutors:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env
+      - .env.local
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT}
+    restart: unless-stopped
+    #Include localhost's dockers in localhost reference
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
