@@ -26,4 +26,4 @@ RUN chown nextjs:nodejs .next
 
 USER nextjs
 EXPOSE ${PORT}
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
