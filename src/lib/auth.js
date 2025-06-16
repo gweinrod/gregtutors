@@ -1,75 +1,81 @@
 import { useState, useEffect, createContext, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { supabase, dataService } from './supabase';
 
-//Create context for authentication
+// Create context for authentication
 const AuthContext = createContext();
 
 export function Authenticator({ children, context }) {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  //Check for client cookie authentication
+  // Check for authentication on mount and auth changes
   useEffect(() => {
-    const { token } = parseCookies();
-    
-    if (token) {
-      //Client side update authentication
-      fetch('/api/token', { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => res.json())
-      .then(data => { if (data.user) { setUser(data.user); }
-                      else { setUser(null); }})
-      .catch(() => { setUser(null) });
-    } else { 
-      setUser(null); 
-    } 
+    // Get initial session
+    const getInitialSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        const profile = await dataService.getUserProfile(session.user.id);
+        setUser({
+          id: session.user.id,
+          email: session.user.email,
+          name: profile?.name || session.user.email
+        });
+      }
+      setLoading(false);
+    };
+
+    getInitialSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          const profile = await dataService.getUserProfile(session.user.id);
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+            name: profile?.name || session.user.email
+          });
+        } else {
+          setUser(null);
+        }
+        setLoading(false);
+      }
+    );
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  //Login
+  // Login
   const login = async (credentials) => {
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials)
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        
-        //Set authentication for 14 days, or end of session
-        setCookie(null, 'token', data.token, {
-          maxAge: 7 * 24 * 60 * 60, // 14 days, or end of session
-          path: '/',
-        });
-        
-        setUser(data.user);
-        return { success: true };
-      } else {
-        const error = await res.json();
-        return { error: error.message || 'Login failed' };
+      if (error) {
+        return { error: error.message };
       }
+
+      return { success: true };
     } catch (error) {
       console.error('Login error:', error);
       return { error: 'An unexpected error occurred' };
     }
   };
 
-  //Logout function
+  // Logout function
   const logout = async () => {
     try {
-      //Delete current session's cookie
-      destroyCookie(null, 'token', { path: '/' });
-      
-      //Notify server of logout
-      await fetch('/api/logout', {
-        method: 'POST'
-      });
-      
+      await supabase.auth.signOut();
       setUser(null);
       
-      //Route to Home
-	if (router.pathname !== '/') {
+      // Route to Home
+      if (router.pathname !== '/') {
         router.replace('/');
       }
     } catch (error) {
@@ -77,15 +83,16 @@ export function Authenticator({ children, context }) {
     }
   };
 
-  //Application context is user dependent
+  // Application context is user dependent
   const authContextValue = {
     user,
     login,
     logout,
+    loading,
     context
   };
 
-  //Authorize and return the updated context
+  // Authorize and return the updated context
   return (
     <AuthContext.Provider value={authContextValue}>
       {children}
@@ -93,7 +100,7 @@ export function Authenticator({ children, context }) {
   );
 }
 
-//Hook passed directly above, refresh authentication and use it to perform an action
+// Hook passed directly above, refresh authentication and use it to perform an action
 export function updateContext() {
   const context = useContext(AuthContext);
   if (context === undefined) {
@@ -102,26 +109,12 @@ export function updateContext() {
   return context;
 }
 
-//Helper for interacting with local authentication
+// Helper for interacting with local authentication
 export async function fillContext(context) {
-  const { token } = parseCookies(context);
-  
-  if (!token) {
-    return { user: null };
-  }
-  
   try {
-    // TODO: write token authentication microservice / private endpoint
-    // TODO: code a placeholder login success account name, password, admin:admin
-    const response = await fetch(`${process.env.API_URL}/api/token`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    
-    const data = await response.json();
-    
-    return { user: data.user || null };
+    // For server-side rendering, we need to check if there's a session
+    // This is a simplified version - in production you'd want to verify the session server-side
+    return { user: null };
   } catch (error) {
     console.error('Auth validation error:', error);
     return { user: null };

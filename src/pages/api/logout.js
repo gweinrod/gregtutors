@@ -1,11 +1,7 @@
+// This endpoint is no longer needed with Supabase auth
+// But keeping it for backward compatibility during transition
 export default async function handler(req, res) {
-  
-  //Post only
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Method not allowed' });
-  }
-
-  // TODO: Further service side logout logic, winding down, clearing context
-  return res.status(200).json({ success: true });
-  
+  return res.status(410).json({ 
+    message: 'This endpoint has been deprecated. Please use Supabase authentication.' 
+  });
 }

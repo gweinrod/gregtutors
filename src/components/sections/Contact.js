@@ -1,11 +1,10 @@
 import React from 'react';
-import Link from 'next/link';
 
-//Contact form links dynamically rendered based on context
+// Contact form links dynamically rendered based on context
 const Contact = ({ user, schedule }) => {
   const render = () => {
     if (!schedule) {
-      return <p>{process.env.NEXT_PUBLIC_NO_SCHEDULE_TEXT || ""}</p>;
+      return <p>{process.env.NEXT_PUBLIC_NO_SCHEDULE_TEXT || "Please contact us for scheduling options."}</p>;
     }
 
     return (
@@ -18,7 +17,7 @@ const Contact = ({ user, schedule }) => {
             rel="noopener noreferrer" 
             className="button"
           >
-            {process.env.NEXT_PUBLIC_SCHEDULE_SESSION_TEXT || ""}
+            {process.env.NEXT_PUBLIC_SCHEDULE_SESSION_TEXT || "Schedule a Session"}
           </a>
           {schedule.paymentUrl && (
             <a 
@@ -27,14 +26,27 @@ const Contact = ({ user, schedule }) => {
               rel="noopener noreferrer" 
               className="button"
             >
-              {process.env.NEXT_PUBLIC_PAYMENT_TEXT || ""}
+              {process.env.NEXT_PUBLIC_PAYMENT_TEXT || "Make a Payment"}
             </a>
           )}
         </div>
       </div>
     );
   };
-    
+
+  return (
+    <section id="contact" className="contact">
+      <h2>{user ? process.env.NEXT_PUBLIC_CURRENT_STUDENTS_TITLE || "Current Students" : process.env.NEXT_PUBLIC_NEW_STUDENTS_TITLE || "New Students"}</h2>
+      {user ? (
+        render()
+      ) : (
+        <>
+          <p>{process.env.NEXT_PUBLIC_LOGIN_PROMPT || "Please log in to access scheduling."}</p>
+          {render()}
+        </>
+      )}
+    </section>
+  );
 };
 
 export default Contact;

@@ -1,91 +1,56 @@
-import { parseCookies } from 'nookies';
+import { dataService } from './supabase';
 
-//Database servicing library, calls endpoint and hydrates pages
+// Database servicing library, now using Supabase
 class Data {
   constructor() {
-    // TODO: configure all API urls
-    this.apiUrl = process.env.API_URL;
+    // Using Supabase instead of external API
   }
 
-  //Fetch Reviews
-  //@param {number} count - Number of reviews to fetch
-  //@returns {Promise<Array>} - Array of reviews
+  // Fetch Reviews
+  // @param {number} count - Number of reviews to fetch
+  // @returns {Promise<Array>} - Array of reviews
   async getReviews(count = 3) {
-    try {
-      const response = await fetch(
-        `${this.apiUrl}/api/getreviews?number=${count}`
-      );
-      
-      if (!response.ok) {
-        console.error('Error fetching reviews:', response.statusText);
-        return [];
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-      return [];
-    }
+    return await dataService.getReviews(count);
   }
   
-  //Fetch Quotes
-  //@param {number} count - Number of quotes to fetch
-  //@returns {Promise<Array>} - Array of quotes
+  // Fetch Quotes
+  // @param {number} count - Number of quotes to fetch
+  // @returns {Promise<Array>} - Array of quotes
   async getQuotes(count = 3) {
-    try {
-      const response = await fetch(
-        `${this.apiUrl}/api/getquotes?number=${count}`
-      );
-      
-      if (!response.ok) {
-        console.error('Error fetching quotes:', response.statusText);
-        return [];
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching quotes:', error);
-      return [];
-    }
+    return await dataService.getQuotes(count);
   }
   
-  //Fetch schedule
-  //@param {Object} user - User object
-  //@param {Object} context - Next.js context object
-  //@returns {Promise<Object|null>} - Schedule data or null
+  // Fetch schedule
+  // @param {Object} user - User object
+  // @param {Object} context - Next.js context object
+  // @returns {Promise<Object|null>} - Schedule data or null
   async getSchedule(user, context) {
     if (!user || !user.id) return null;
     
     try {
-      const { token } = parseCookies(context);
+      const hasAccess = await dataService.getScheduleAccess(user.id);
       
-      if (!token) return null;
-      
-      const response = await fetch(
-        `${this.apiUrl}/api/schedule?userId=${user.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-      
-      if (!response.ok) {
-        console.error('Error fetching scheduler data:', response.statusText);
-        return null;
+      if (hasAccess) {
+        return {
+          message: "You have access to schedule sessions.",
+          calendarUrl: process.env.NEXT_PUBLIC_CALENDAR_URL || "https://calendar.google.com/",
+          paymentUrl: process.env.NEXT_PUBLIC_PAYMENT_URL || "https://venmo.com/"
+        };
+      } else {
+        return {
+          message: "You don't currently have scheduling access. Please use the contact links for more information."
+        };
       }
-      
-      return await response.json();
     } catch (error) {
       console.error('Error fetching scheduler data:', error);
       return null;
     }
   }
   
- //Fetch Home
- //@param {Object} context - Next.js context object
- //@param {Object} user - User object from auth
- //@returns {Promise<Object>} - All data for the home page
+  // Fetch Home
+  // @param {Object} context - Next.js context object
+  // @param {Object} user - User object from auth
+  // @returns {Promise<Object>} - All data for the home page
   async getHome(context, user) {
     // Fetch reviews and quotes in parallel
     const [reviews, quotes] = await Promise.all([
@@ -93,7 +58,7 @@ class Data {
       this.getQuotes(3)
     ]);
     
-    //Fetch Schedule if authenticated
+    // Fetch Schedule if authenticated
     const schedule = user ? await this.getSchedule(user, context) : null;
     
     return {
