@@ -5,13 +5,13 @@ import Info from './sections/Info';
 import Reviews from './sections/Reviews';
 import Contact from './sections/Contact';
 
-const Content = ({ reviews, quotes, user, schedule }) => {
+const Content = ({ reviews, quotes, user, schedule, onOpenLogin }) => {
   return (
     <main className="content">
       <About />
       <Info quotes={quotes} />
       <Reviews reviews={reviews} />
-      <Contact user={user} schedule={schedule} />
+      <Contact user={user} schedule={schedule} onOpenLogin={onOpenLogin} />
     </main>
   );
 };

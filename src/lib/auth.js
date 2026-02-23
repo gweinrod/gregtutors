@@ -18,11 +18,24 @@ export function Authenticator({ children, context }) {
       
       if (session?.user) {
         const profile = await dataService.getUserProfile(session.user.id);
+        const name = profile?.name || session.user.email;
         setUser({
           id: session.user.id,
           email: session.user.email,
-          name: profile?.name || session.user.email
+          name
         });
+        await dataService.upsertClient({
+          id: session.user.id,
+          email: session.user.email,
+          name
+        });
+        if (session.access_token && name) {
+          fetch('/api/backfill-schedule-name', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name })
+          }).catch(() => {});
+        }
       }
       setLoading(false);
     };
@@ -34,11 +47,24 @@ export function Authenticator({ children, context }) {
       async (event, session) => {
         if (session?.user) {
           const profile = await dataService.getUserProfile(session.user.id);
+          const name = profile?.name || session.user.email;
           setUser({
             id: session.user.id,
             email: session.user.email,
-            name: profile?.name || session.user.email
+            name
           });
+          await dataService.upsertClient({
+            id: session.user.id,
+            email: session.user.email,
+            name
+          });
+          if (session.access_token && name) {
+            fetch('/api/backfill-schedule-name', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name })
+            }).catch(() => {});
+          }
         } else {
           setUser(null);
         }
@@ -49,19 +75,79 @@ export function Authenticator({ children, context }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Login
-  const login = async (credentials) => {
+  // Login with Google using our domain only (no redirect to supabase.co).
+  // Call this with the id_token from Google Identity Services callback.
+  const signInWithGoogleIdToken = async (idToken) => {
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: credentials.email,
-        password: credentials.password,
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: idToken,
       });
 
       if (error) {
         return { error: error.message };
       }
 
+      if (data?.session?.user) {
+        const u = data.session.user;
+        const nameFromMeta = u.user_metadata?.full_name || u.user_metadata?.name;
+        setUser({
+          id: u.id,
+          email: u.email,
+          name: nameFromMeta || u.email,
+        });
+        setLoading(false);
+        // Run profile + clients sync in background so login modal closes immediately
+        (async () => {
+          try {
+            const profile = await dataService.getUserProfile(u.id);
+            const name = profile?.name || nameFromMeta || u.email;
+            setUser((prev) => (prev ? { ...prev, name } : null));
+            await dataService.upsertClient({ id: u.id, email: u.email, name });
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.access_token && name) {
+              fetch('/api/backfill-schedule-name', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+              }).catch(() => {});
+            }
+          } catch (e) {
+            console.error('Post-login sync:', e);
+          }
+        })();
+        return { success: true };
+      }
+      setLoading(false);
       return { success: true };
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      setLoading(false);
+      return { error: error.message || 'An unexpected error occurred' };
+    }
+  };
+
+  // Legacy OAuth redirect (not used for Google when using signInWithGoogleIdToken)
+  const loginWithProvider = async (provider) => {
+    if (provider === 'google') {
+      return { error: 'Use the Google button above to sign in.' };
+    }
+    try {
+      const redirectTo = typeof window !== 'undefined'
+        ? `${window.location.origin}/auth/callback`
+        : `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:4200'}/auth/callback`;
+
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: { redirectTo },
+      });
+
+      if (error) return { error: error.message };
+      if (data?.url) {
+        window.location.href = data.url;
+        return { success: true };
+      }
+      return { error: 'Could not start sign-in' };
     } catch (error) {
       console.error('Login error:', error);
       return { error: 'An unexpected error occurred' };
@@ -86,7 +172,8 @@ export function Authenticator({ children, context }) {
   // Application context is user dependent
   const authContextValue = {
     user,
-    login,
+    loginWithProvider,
+    signInWithGoogleIdToken,
     logout,
     loading,
     context

@@ -9,26 +9,51 @@ const Header = ({ user, openModal, logout, theme, page }) => {
   return (
     <header className={`site-header ${theme}`}>
       <div className="logo">
-        <Link href="/" passHref>Greg Tutors</Link>
+        <Link href="/">
+          <img
+            src="/logo.png"
+            alt="Greg Tutors"
+            className="logo-img"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              const fallback = e.target.nextElementSibling;
+              if (fallback) fallback.style.display = 'inline';
+            }}
+          />
+          <span className="logo-fallback" style={{ display: 'none' }}>Greg Tutors</span>
+        </Link>
       </div>
       
       <nav className="main-nav">
         <ul>
           <li>
-            <a href="https://calendar.google.com/calendar/appointments/schedules/AcZssZ1--meUbXKA2NolTHv1GRyNIC7PzpJhRHrVeJfm5HpptANsZhB6r3mlLPpcKAxB3PfyayMWzmR0" target="_blank" rel="noopener noreferrer">
-              Schedule
-            </a>
+            {user ? (
+              <a
+                href="/schedule"
+                className={router.pathname === '/schedule' ? 'active' : ''}
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push('/schedule');
+                }}
+              >
+                Schedule
+              </a>
+            ) : (
+              <a href="/#contact" className={router.asPath === '/#contact' ? 'active' : ''}>
+                Schedule
+              </a>
+            )}
           </li>
           <li>
-            <a href="https://docs.google.com/forms/d/1lxRlkC5CUUhBPAGlBGpmEx5Lg_WiHPM4Axlmnae5FNg/" target="_blank" rel="noopener noreferrer">
+            <Link href="/contact" className={router.pathname === '/contact' ? 'active' : ''}>
               Contact
-            </a>
+            </Link>
           </li>
-          
-          {/* Only show Classes link if user is logged in */}
           {user && (
             <li>
-              <Link href="/classes" passHref className={router.pathname === '/classes' ? 'active' : ''}>Classes</Link>
+              <Link href="/classes" className={router.pathname === '/classes' ? 'active' : ''}>
+                Classes
+              </Link>
             </li>
           )}
         </ul>

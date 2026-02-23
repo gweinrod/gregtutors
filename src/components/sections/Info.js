@@ -10,19 +10,21 @@ const Info = ({ quotes }) => {
 
   return (
     <section id="info" className="info">
-      <h2>{process.env.NEXT_PUBLIC_INFO || ""}</h2>
+      <h2>{process.env.NEXT_PUBLIC_PHILOSOPHY_TITLE || "Philosophy"}</h2>
       <p>{process.env.NEXT_PUBLIC_INFO_TEXT || ""}</p>
       
       {quotes && quotes.length > 0 ? (
         quotes.map((quote, index) => (
           <blockquote key={index}>
-            "{quote.text}" - {quote.author}
+            <p className="text">"{quote.text}"</p>
+            <p className="author">- {quote.author}</p>
           </blockquote>
         ))
       ) : (
         defaultQuotes.map((quote, index) => (
           <blockquote key={index}>
-            "{quote.text}" - {quote.author}
+            <p className="text">"{quote.text}"</p>
+            <p className="author">- {quote.author}</p>
           </blockquote>
         ))
       )}

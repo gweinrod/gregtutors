@@ -1,6 +1,7 @@
 // Next Navigation
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Script from 'next/script';
 import Link from 'next/link';
 
 // Layout
@@ -12,6 +13,7 @@ import Modal from '../components/Modal';
 // Custom Auth and Data
 import { updateContext, fillContext } from '../lib/auth';
 import Data from '../lib/Data';
+import { getRecaptchaSiteKey, executeAndVerify, checkActionAllowed } from '../lib/recaptcha';
 
 // Dynamic Home Page
 /* Header is Login State and User Information */
@@ -20,23 +22,54 @@ import Data from '../lib/Data';
 export default function Home({ reviews, quotes, schedule }) {
   
   // Get the context of the user's experienced if authorized, else display defaults
-  const { user, login, logout, context } = updateContext();
+  const { user, loginWithProvider, signInWithGoogleIdToken, logout, context } = updateContext();
   
   // Modal is set to the current use case of the modal when active
   const [modal, setModal] = useState(null);
-  
-  // Return Dynamic Head, Header, Content, Footer, Modal Login
+  const [recaptchaScore, setRecaptchaScore] = useState(null);
+
+  const siteKey = getRecaptchaSiteKey();
+
+  useEffect(() => {
+    if (!siteKey || typeof window === 'undefined') {
+      setRecaptchaScore(1);
+      return;
+    }
+    let cancelled = false;
+    executeAndVerify('homepage').then(({ ok, score }) => {
+      if (!cancelled) setRecaptchaScore(ok ? score : 0);
+    });
+    return () => { cancelled = true; };
+  }, [siteKey]);
+
+  const openLoginModal = async () => {
+    if (recaptchaScore !== null && recaptchaScore < 0.5) return;
+    const { allowed } = await checkActionAllowed('login');
+    if (allowed) setModal('login');
+  };
+
+  const handleLogout = async () => {
+    const { allowed } = await checkActionAllowed('logout');
+    if (allowed) logout();
+  };
+
   return (
     <div className="page-container">
       <Head>
         <title>{context.siteTitle}</title>
         <meta name="description" content={process.env.NEXT_PUBLIC_SITE_DESCRIPTION || ""} />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
+      {siteKey && (
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`}
+          strategy="afterInteractive"
+        />
+      )}
       <Header 
         user={user} 
-        openModal={() => setModal('login')} 
-        logout={logout}
+        openModal={openLoginModal}
+        logout={handleLogout}
         theme={context.theme}
       />
       
@@ -45,6 +78,7 @@ export default function Home({ reviews, quotes, schedule }) {
         quotes={quotes} 
         user={user}
         schedule={schedule}
+        onOpenLogin={openLoginModal}
       />
       
       <Footer />
@@ -52,7 +86,8 @@ export default function Home({ reviews, quotes, schedule }) {
       {modal === 'login' && (
         <Modal 
           onClose={() => setModal(null)}
-          login={login}
+          loginWithProvider={loginWithProvider}
+          signInWithGoogleIdToken={signInWithGoogleIdToken}
         />
       )}
     </div>

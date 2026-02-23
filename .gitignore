@@ -1,2 +1,9 @@
 node_modules/
+.next/
+# Env files (secrets) – never commit
 .env
+.env.*
+!.env.example
+.env.local
+.env.production
+.env.development

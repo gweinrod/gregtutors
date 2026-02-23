@@ -10,7 +10,7 @@ const Reviews = ({ reviews }) => {
 
   return (
     <section id="reviews" className="reviews">
-      <h2>Reviews</h2>
+      <h2>Testimonials</h2>
       <div className="reviews-list">
         {reviews && reviews.length > 0 ? (
           reviews.map((review, index) => (

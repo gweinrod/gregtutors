@@ -1,11 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
 :root {
   /* Light theme colors */
   --light-bg-primary: #ffffff;
   --light-bg-secondary: #f5f5f5; /* off-white */
+  --light-bg-cream: #f5f0e8; /* cream from schedule */
   --light-accent-primary: #000080; /* navy blue */
   --light-accent-secondary: #ffd700; /* gold */
   --light-highlight: #ff00ff; /* magenta */
   --light-text: #222222; /* very dark gray */
+  --light-border: #ddd5c5; /* cream-appropriate border (schedule) */
 
   /* Dark theme colors */
   --dark-bg-primary: #121212; /* black */
@@ -21,8 +25,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 html,
@@ -95,18 +98,22 @@ body.dark .button:hover {
 .content {
   flex: 1;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 1rem auto;
   padding: 2rem;
 }
 
-/* Header */
+/* Header – sizing and fonts aligned with schedule (ws-header) */
 .site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: var(--light-bg-secondary);
+  padding: 0 32px;
+  height: 68px;
+  background-color: var(--light-bg-cream);
   border-bottom: 3px solid var(--light-accent-secondary);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  font-family: 'Nunito', sans-serif;
 }
 
 body.dark .site-header {
@@ -115,9 +122,27 @@ body.dark .site-header {
 }
 
 .site-header .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-family: 'Nunito', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
   color: var(--light-accent-primary);
+}
+
+.site-header .logo a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header .logo .logo-img {
+  display: block;
+  height: 2rem;
+  width: auto;
+}
+
+.site-header .logo .logo-fallback {
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 body.dark .site-header .logo {
@@ -131,7 +156,10 @@ body.dark .site-header .logo {
 }
 
 .main-nav a {
-  font-weight: 500;
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .main-nav a.active {
@@ -149,7 +177,19 @@ body.dark .main-nav a.active {
   align-items: center;
 }
 
+.welcome {
+  margin-right: 1rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
 .login-btn, .logout-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
@@ -170,15 +210,13 @@ body.dark .login-btn:hover, body.dark .logout-btn:hover {
   background-color: var(--dark-highlight);
 }
 
-.welcome {
-  margin-right: 1rem;
-}
-
 /* Footer */
 .footer {
   padding: 1.5rem;
-  background-color: var(--light-bg-secondary);
+  background-color: var(--light-bg-cream);
   border-top: 3px solid var(--light-accent-secondary);
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   text-align: center;
 }
 
@@ -191,17 +229,19 @@ body.dark .footer {
   margin-bottom: 0.5rem;
 }
 
-/* Section Styles */
+/* Section Styles – gold border around each section (philosophy, quotes, reviews, contact) */
 section {
   margin-bottom: 3rem;
   padding: 2rem;
-  background-color: var(--light-bg-primary);
+  background-color: var(--light-bg-cream);
+  border: 3px solid var(--light-accent-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 body.dark section {
   background-color: var(--dark-bg-secondary);
+  border-color: var(--dark-accent-secondary);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
@@ -230,14 +270,28 @@ body.dark section h2 {
 .info blockquote {
   margin: 1.5rem 0;
   padding: 1rem 1.5rem;
-  border-left: 4px solid var(--light-accent-secondary);
-  background-color: var(--light-bg-secondary);
+  background-color: var(--light-bg-cream);
   font-style: italic;
 }
 
 body.dark .info blockquote {
-  border-left: 4px solid var(--dark-accent-secondary);
   background-color: var(--dark-bg-primary);
+}
+
+.info blockquote .text {
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.info blockquote .author {
+  text-align: right;
+  font-weight: bold;
+  font-style: normal;
+  color: var(--light-accent-primary);
+}
+
+body.dark .info blockquote .author {
+  color: var(--dark-accent-secondary);
 }
 
 /* Reviews Section */
@@ -274,12 +328,22 @@ body.dark .review .author {
 }
 
 /* Contact Section */
-.contact h2 {
-  margin-top: 1.5rem;
-}
-
 .contact p {
   margin-bottom: 1rem;
+}
+
+.contact-inline-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--link-color, #0066cc);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.contact-inline-link:hover {
+  text-decoration: none;
 }
 
 /* Scheduler */
@@ -295,6 +359,136 @@ body.dark .review .author {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+/* Classes list (text-only, past/future toggle) */
+.classes-list-section h2 {
+  margin-top: 0;
+}
+
+.classes-toggle-wrap {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.classes-toggle-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--light-border, #ddd5c5);
+  background: var(--light-bg-cream);
+  color: var(--light-text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.classes-toggle-btn:hover {
+  background: var(--light-bg-secondary, #f5f5f5);
+}
+
+.classes-toggle-btn.active {
+  background: var(--light-accent-primary);
+  color: white;
+  border-color: var(--light-accent-primary);
+}
+
+body.dark .classes-toggle-btn {
+  background: var(--dark-bg-primary);
+  border-color: #555;
+  color: var(--dark-text);
+}
+
+body.dark .classes-toggle-btn:hover {
+  background: var(--dark-bg-secondary);
+}
+
+body.dark .classes-toggle-btn.active {
+  background: var(--dark-accent-primary);
+  color: white;
+  border-color: var(--dark-accent-primary);
+}
+
+.classes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.classes-list-item {
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--light-border, #ddd5c5);
+  font-family: 'Nunito', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: baseline;
+}
+
+.classes-list-item:last-child {
+  border-bottom: none;
+}
+
+.classes-date {
+  font-weight: 700;
+  color: var(--light-accent-primary);
+  min-width: 11rem;
+}
+
+.classes-time {
+  color: var(--light-text);
+}
+
+.classes-title {
+  font-weight: 600;
+}
+
+.classes-cat {
+  font-weight: 500;
+}
+.classes-cat-inperson {
+  color: #1a6bbf;
+}
+.classes-cat-remote {
+  color: #7b3fa0;
+}
+.classes-cat-unavailable {
+  color: #c0392b;
+}
+
+body.dark .classes-list-item {
+  border-bottom-color: #555;
+}
+
+body.dark .classes-date {
+  color: var(--dark-accent-secondary);
+}
+
+body.dark .classes-time,
+body.dark .classes-title {
+  color: var(--dark-text);
+}
+
+body.dark .classes-cat-inperson {
+  color: #5a9fd4;
+}
+body.dark .classes-cat-remote {
+  color: #a56bc4;
+}
+body.dark .classes-cat-unavailable {
+  color: #e07474;
+}
+
+.classes-empty {
+  color: var(--light-text);
+  font-style: italic;
+}
+
+body.dark .classes-empty {
+  color: var(--dark-text);
 }
 
 /* Modal */
@@ -341,12 +535,74 @@ body.dark .modal .close {
 }
 
 .modal h2 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem;
   color: var(--light-accent-primary);
 }
 
 body.dark .modal h2 {
   color: var(--dark-accent-secondary);
+}
+
+.modal-subtitle {
+  margin-bottom: 1.5rem;
+  color: var(--light-text);
+  font-size: 0.95rem;
+}
+
+body.dark .modal-subtitle {
+  color: var(--dark-text);
+}
+
+/* OAuth buttons */
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.modal .google-button-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.oauth-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: var(--light-text);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+body.dark .oauth-btn {
+  background-color: var(--dark-bg-primary);
+  color: var(--dark-text);
+  border-color: #555;
+}
+
+.oauth-btn:hover:not(:disabled) {
+  background-color: var(--light-bg-secondary);
+  border-color: #999;
+}
+
+body.dark .oauth-btn:hover:not(:disabled) {
+  background-color: var(--dark-bg-secondary);
+  border-color: #777;
+}
+
+.oauth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.oauth-btn-google {
+  color: #333;
 }
 
 .modal .error {

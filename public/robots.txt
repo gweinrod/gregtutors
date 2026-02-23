@@ -1,0 +1,6 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap (use your production URL in production)
+Sitemap: https://www.gregtutors.com/sitemap.xml
