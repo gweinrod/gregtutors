@@ -718,3 +718,17 @@ body.dark .modal .submit:hover {
     grid-template-columns: 1fr;
   }
 }
+
+/* reCAPTCHA badge container: place badge below the timetable on schedule page */
+.schedule-recaptcha-badge-container {
+  position: relative;
+  min-height: 70px;
+  width: 100%;
+}
+.schedule-recaptcha-badge-container .grecaptcha-badge {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  top: auto !important;
+  left: auto !important;
+}

@@ -1202,6 +1202,27 @@ export default function SchedulePage({ adminEmail, initialScheduleRows }) {
     }
   }, [scheduleAllowed, router]);
 
+  // Move reCAPTCHA badge into our container so it appears below the timetable, not over it
+  useEffect(() => {
+    if (typeof window === "undefined" || !user) return;
+    const container = document.getElementById("schedule-recaptcha-badge-container");
+    if (!container) return;
+    const moveBadge = () => {
+      const badge = document.querySelector(".grecaptcha-badge");
+      if (badge && badge.parentNode !== container) {
+        container.appendChild(badge);
+      }
+    };
+    moveBadge();
+    const observer = new MutationObserver(moveBadge);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => {
+      observer.disconnect();
+      const badge = document.querySelector(".grecaptcha-badge");
+      if (badge && document.body) document.body.appendChild(badge);
+    };
+  }, [user]);
+
   const handleLogout = async () => {
     const { allowed } = await checkActionAllowed("logout");
     if (allowed) logout();
@@ -1229,7 +1250,10 @@ export default function SchedulePage({ adminEmail, initialScheduleRows }) {
         {loading ? (
           <div style={{ padding: "2rem", textAlign: "center", fontFamily: "Nunito, sans-serif" }}>Loading…</div>
         ) : user ? (
-          <WeeklySchedule user={user} adminEmail={adminEmail || ""} initialScheduleRows={initialScheduleRows || []} />
+          <>
+            <WeeklySchedule user={user} adminEmail={adminEmail || ""} initialScheduleRows={initialScheduleRows || []} />
+            <div id="schedule-recaptcha-badge-container" className="schedule-recaptcha-badge-container" aria-hidden="true" />
+          </>
         ) : null}
       </main>
       <Footer />
