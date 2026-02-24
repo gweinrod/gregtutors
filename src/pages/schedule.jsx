@@ -488,11 +488,11 @@ const CSS = `
 .ws-radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
 .ws-radio-label input { width: 18px; height: 18px; accent-color: var(--main-blue); }
 
-/* Mobile: force schedule to viewport width so all 7 days fit; allow cells to shrink */
+/* Mobile (incl. landscape): no margin/padding so schedule is edge-to-edge and gold border doesn't clip */
 @media (max-width: 768px) {
-  .ws-root { margin: 0.25rem; width: 100%; max-width: 100%; box-sizing: border-box; }
-  .ws-header { padding: 0 12px; }
-  .ws-planner { padding: 0 8px 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
+  .ws-root { margin: 0; padding: 0; width: 100%; max-width: 100%; box-sizing: border-box; }
+  .ws-header { padding: 0 8px; }
+  .ws-planner { padding: 0 0 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-grid-wrap { min-width: 0; width: 100%; max-width: 100%; }
   .ws-calendar-wrap { width: 100%; max-width: 100%; min-width: 0; }
   .ws-scroll-grid { min-width: 0; }
