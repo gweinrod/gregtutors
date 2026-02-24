@@ -698,6 +698,17 @@ body.dark .modal .submit:hover {
   .content {
     padding: 1rem;
   }
+
+  /* Schedule page: lock to viewport width so timetable fits (no horizontal scroll) */
+  .content.schedule-page {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
   
   section {
     padding: 1.5rem;

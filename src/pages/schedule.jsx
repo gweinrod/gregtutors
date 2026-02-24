@@ -493,8 +493,7 @@ const CSS = `
   .ws-root { margin: 0.25rem; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-header { padding: 0 12px; }
   .ws-planner { padding: 0 8px 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
-  /* Override base min-width: 700px so grid can shrink to viewport */
-  .ws-grid-wrap { min-width: 0 !important; width: 100%; max-width: 100%; }
+  .ws-grid-wrap { min-width: 0; width: 100%; max-width: 100%; }
   .ws-calendar-wrap { width: 100%; max-width: 100%; min-width: 0; }
   .ws-scroll-grid { min-width: 0; }
   .ws-time-grid { width: 100%; max-width: 100%; min-width: 0; }
@@ -1201,7 +1200,7 @@ export default function SchedulePage({ adminEmail, initialScheduleRows }) {
         page="schedule"
         theme={context.theme}
       />
-      <main className="content" style={{ padding: 0 }}>
+      <main className="content schedule-page" style={{ padding: 0 }}>
         {loading ? (
           <div style={{ padding: "2rem", textAlign: "center", fontFamily: "Nunito, sans-serif" }}>Loading…</div>
         ) : user ? (

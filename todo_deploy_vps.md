@@ -22,53 +22,53 @@ No database runs on the VPS; Supabase stays in the cloud. Email (Resend) and reC
 
 ### 1. IONOS VPS and SSH
 
-- [ ] Create an IONOS VPS (e.g. Ubuntu 22.04 LTS), note the **public IP**.
-- [ ] Add your SSH key in the IONOS panel (or use password auth initially).
-- [ ] SSH in: `ssh root@YOUR_VPS_IP` (or your user if you created one).
+- [x] Create an IONOS VPS (e.g. Ubuntu 22.04 LTS), note the **public IP**.
+- [x] Add your SSH key in the IONOS panel (or use password auth initially).
+- [x] SSH in: `ssh root@YOUR_VPS_IP` (or your user if you created one).
 
 ### 2. Domain DNS
 
-- [ ] In IONOS (or your DNS provider), add an **A record**: host `@` (or `www` if you prefer) → VPS public IP.
-- [ ] Optional: add **AAAA** if you have IPv6. Wait for DNS to propagate (up to 24–48 hours, often minutes).
+- [x] In IONOS (or your DNS provider), add an **A record**: host `@` (or `www` if you prefer) → VPS public IP.
+- [x] Optional: add **AAAA** if you have IPv6. Wait for DNS to propagate (up to 24–48 hours, often minutes).
 
 ### 3. Server setup (run on the VPS)
 
-- [ ] Update system:  
+- [x] Update system:  
   `sudo apt update && sudo apt upgrade -y`
-- [ ] Install Node.js 20 (LTS):  
+- [x] Install Node.js 20 (LTS):  
   ```bash
   curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
   sudo apt install -y nodejs
   node -v   # should be v20.x
   ```
-- [ ] Install Nginx and Certbot:  
+- [x] Install Nginx and Certbot:  
   `sudo apt install -y nginx certbot python3-certbot-nginx`
-- [ ] Install PM2 globally:  
+- [x] Install PM2 globally:  
   `sudo npm install -g pm2`
 
 ### 4. Deploy the app on the VPS
 
-- [ ] Clone the repo (or upload files). Example with git:  
+- [x] Clone the repo (or upload files). Example with git:  
   ```bash
   cd /var/www  # or e.g. /opt
   sudo mkdir -p gregtutors && sudo chown $USER:$USER gregtutors
   git clone https://github.com/YOUR_USER/gregtutors.git gregtutors
   cd gregtutors
   ```
-- [ ] Create production env file (do **not** commit this):  
+- [x] Create production env file (do **not** commit this):  
   ```bash
   cp .env.example .env.production
   nano .env.production   # or vim
   ```
-- [ ] Set **all** required variables in `.env.production` (see “Env vars to set” below). Important:
+- [x] Set **all** required variables in `.env.production` (see “Env vars to set” below). Important:
   - `NEXT_PUBLIC_SITE_URL=https://yourdomain.com` (your real domain, no trailing slash).
   - Supabase URL/keys, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_NOTIFY_EMAIL`, Resend, reCAPTCHA, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`, etc.
-- [ ] Install dependencies and build:  
+- [x] Install dependencies and build:  
   ```bash
   npm ci
   npm run build
   ```
-- [ ] Start with PM2 (from repo root; Next.js will load `.env.production` when `NODE_ENV=production`):  
+- [x] Start with PM2 (from repo root; Next.js will load `.env.production` when `NODE_ENV=production`):  
   ```bash
   pm2 start ecosystem.config.cjs
   pm2 save
@@ -77,7 +77,7 @@ No database runs on the VPS; Supabase stays in the cloud. Email (Resend) and reC
 
 ### 5. Nginx and SSL
 
-- [ ] Create Nginx site config (replace `yourdomain.com` and adjust path if different):  
+- [x] Create Nginx site config (replace `yourdomain.com` and adjust path if different):  
   ```bash
   sudo nano /etc/nginx/sites-available/gregtutors
   ```
@@ -101,26 +101,26 @@ No database runs on the VPS; Supabase stays in the cloud. Email (Resend) and reC
   }
   ```
 
-- [ ] Enable site and reload Nginx:  
+- [x] Enable site and reload Nginx:  
   ```bash
   sudo ln -s /etc/nginx/sites-available/gregtutors /etc/nginx/sites-enabled/
   sudo nginx -t && sudo systemctl reload nginx
   ```
-- [ ] Get SSL certificate:  
+- [x] Get SSL certificate:  
   `sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com`  
   (Use HTTPS only when Certbot offers it.)
 
 ### 6. Supabase and Google OAuth
 
-- [ ] **Supabase** → Project → Auth → URL Configuration:
+- [x] **Supabase** → Project → Auth → URL Configuration:
   - Add `https://yourdomain.com` and `https://www.yourdomain.com` to **Site URL** and **Redirect URLs**.
-- [ ] **Google Cloud Console** → APIs & Services → Credentials → your OAuth 2.0 Client:
+- [x] **Google Cloud Console** → APIs & Services → Credentials → your OAuth 2.0 Client:
   - **Authorized JavaScript origins**: add `https://yourdomain.com` and `https://www.yourdomain.com`.
   - **Authorized redirect URIs**: add Supabase callback URL (e.g. `https://YOUR_PROJECT.supabase.co/auth/v1/callback`; Supabase shows it in Auth → Providers → Google).
 
 ### 7. Firewall (recommended)
 
-- [ ] Allow SSH, HTTP, HTTPS; block everything else:  
+- [x] Allow SSH, HTTP, HTTPS; block everything else:  
   ```bash
   sudo ufw allow 22
   sudo ufw allow 80
@@ -131,8 +131,8 @@ No database runs on the VPS; Supabase stays in the cloud. Email (Resend) and reC
 
 ### 8. Verify and maintain
 
-- [ ] Open `https://yourdomain.com` and test: login (Google), schedule, contact form, classes.
-- [ ] Set a reminder to renew SSL (Certbot usually adds a cron job; confirm with `sudo systemctl status certbot.timer` or `crontab -l`).
+- [x] Open `https://yourdomain.com` and test: login (Google), schedule, contact form, classes.
+- [x] Set a reminder to renew SSL (Certbot usually adds a cron job; confirm with `sudo systemctl status certbot.timer` or `crontab -l`).
 
 ---
 
