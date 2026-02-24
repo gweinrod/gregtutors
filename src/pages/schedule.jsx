@@ -287,6 +287,11 @@ const CSS = `
   transition: opacity 0.18s; min-width: 130px;
 }
 .ws-btn-add:hover { opacity: 0.9; }
+.ws-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
 /* LEGEND */
 .ws-legend {
@@ -508,10 +513,27 @@ const CSS = `
   .ws-day-header.today .ws-day-num { width: 28px; height: 28px; font-size: 14px; }
   .ws-event-title { font-size: 11px; }
 }
-/* Portrait: minimal padding, narrow time column, so all 7 days fit */
+/* Portrait: stack "Jump to Now" and "New" below schedule title and date range so they aren't clipped */
 @media (max-width: 480px) {
   .ws-root { margin: 0; padding: 0; width: 100%; max-width: 100%; }
-  .ws-header { padding: 0 4px; }
+  .ws-header {
+    padding: 0 4px 8px;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 68px;
+    gap: 0;
+  }
+  .ws-header .ws-week-nav { margin-left: 8px; margin-right: 8px; }
+  .ws-header .ws-week-label { min-width: 120px; font-size: 15px; }
+  .ws-header-actions {
+    width: 100%;
+    flex-basis: 100%;
+    margin-top: 8px;
+    justify-content: center;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+  }
+  .ws-btn-today, .ws-btn-add { min-width: 0; padding: 6px 12px; font-size: 14px; }
   .ws-planner { padding: 0 2px 12px; width: 100%; max-width: 100%; }
   .ws-legend { padding: 2px 4px; }
   .ws-time-labels { width: 28px; font-size: 10px; padding-right: 2px; }
@@ -531,7 +553,9 @@ const CSS = `
   .ws-day-num { font-size: 13px; }
   .ws-day-header.today .ws-day-num { width: 20px; height: 20px; font-size: 10px; }
   .ws-time-slot { padding-right: 0; font-size: 9px; }
-  .ws-header { padding: 0 2px; }
+  .ws-header { padding: 0 2px 6px; }
+  .ws-header .ws-week-label { min-width: 100px; font-size: 14px; }
+  .ws-btn-today, .ws-btn-add { padding: 5px 10px; font-size: 13px; }
   .ws-legend { padding: 2px 2px; }
   .ws-event-title { font-size: 9px; }
 }
@@ -1007,7 +1031,7 @@ function WeeklySchedule({ user, adminEmail, initialScheduleRows = [] }) {
           </button>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        <div className="ws-header-actions">
           <button className="ws-btn-today" onClick={goToToday}>Jump to Now</button>
           <button className="ws-btn-add" onClick={() => openNew(todayStr, "09:00")}>
             <span style={{ fontSize: 18, lineHeight: 1 }}>+</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;New&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
