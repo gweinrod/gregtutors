@@ -517,7 +517,7 @@ const CSS = `
 @media (max-width: 480px) {
   .ws-root { margin: 0; padding: 0; width: 100%; max-width: 100%; }
   .ws-header {
-    padding: 8px 4px 8px;
+    padding: 8px 4px 0;
     flex-wrap: wrap;
     height: auto;
     min-height: 68px;
@@ -530,7 +530,7 @@ const CSS = `
     flex-basis: 100%;
     margin-top: 8px;
     justify-content: center;
-    padding: 8px 0;
+    padding: 8px 0 8px;
     border-top: 1px solid var(--border);
   }
   .ws-btn-today, .ws-btn-add { min-width: 0; padding: 6px 12px; font-size: 14px; }
@@ -553,8 +553,8 @@ const CSS = `
   .ws-day-num { font-size: 13px; }
   .ws-day-header.today .ws-day-num { width: 20px; height: 20px; font-size: 10px; }
   .ws-time-slot { padding-right: 0; font-size: 9px; }
-  .ws-header { padding: 6px 2px 6px; }
-  .ws-header-actions { padding: 6px 0; }
+  .ws-header { padding: 6px 2px 0; }
+  .ws-header-actions { padding: 6px 0 6px; }
   .ws-header .ws-week-label { min-width: 100px; font-size: 14px; }
   .ws-btn-today, .ws-btn-add { padding: 5px 10px; font-size: 13px; }
   .ws-legend { padding: 2px 2px; }
