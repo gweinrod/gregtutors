@@ -205,7 +205,6 @@ const CSS = `
   font-family: 'Nunito', sans-serif;
   background: var(--cream);
   color: var(--ink);
-  min-height: 100vh;
   margin: 1rem;
   border: 3px solid var(--gold);
   border-radius: 8px;
