@@ -487,6 +487,20 @@ const CSS = `
 .ws-radio-wrap { display: flex; gap: 16px; flex-wrap: wrap; }
 .ws-radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
 .ws-radio-label input { width: 18px; height: 18px; accent-color: var(--main-blue); }
+
+/* Mobile: shrink grid to fit all 7 days, reduce padding for horizontal space */
+@media (max-width: 768px) {
+  .ws-root { margin: 0.25rem; }
+  .ws-header { padding: 0 12px; }
+  .ws-planner { padding: 0 8px 24px; }
+  .ws-grid-wrap { min-width: 0; }
+  .ws-legend { padding: 4px 8px 2px; }
+  .ws-time-labels { width: 44px; }
+  .ws-day-headers { grid-template-columns: 44px repeat(7, 1fr); }
+  .ws-day-name { font-size: 11px; letter-spacing: 0.06em; }
+  .ws-day-num { font-size: 18px; }
+  .ws-day-header.today .ws-day-num { width: 28px; height: 28px; font-size: 14px; }
+}
 `;
 
 // ── MODAL COMPONENT ──
