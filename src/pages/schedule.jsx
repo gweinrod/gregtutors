@@ -530,7 +530,7 @@ const CSS = `
     flex-basis: 100%;
     margin-top: 8px;
     justify-content: center;
-    padding-top: 4px;
+    padding: 8px 0;
     border-top: 1px solid var(--border);
   }
   .ws-btn-today, .ws-btn-add { min-width: 0; padding: 6px 12px; font-size: 14px; }
@@ -554,6 +554,7 @@ const CSS = `
   .ws-day-header.today .ws-day-num { width: 20px; height: 20px; font-size: 10px; }
   .ws-time-slot { padding-right: 0; font-size: 9px; }
   .ws-header { padding: 6px 2px 6px; }
+  .ws-header-actions { padding: 6px 0; }
   .ws-header .ws-week-label { min-width: 100px; font-size: 14px; }
   .ws-btn-today, .ws-btn-add { padding: 5px 10px; font-size: 13px; }
   .ws-legend { padding: 2px 2px; }
