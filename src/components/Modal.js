@@ -65,15 +65,22 @@ const Modal = ({ onClose, loginWithProvider, signInWithGoogleIdToken }) => {
     if (!response?.credential || !signInWithGoogleIdToken) return;
     setError('');
     setLoadingProvider('google');
+    const timeoutMs = 16000; // Slightly longer than auth.js timeout
+    const timeoutId = setTimeout(() => {
+      setLoadingProvider(null);
+      setError('Sign-in is taking too long. Please try again or close and reopen the modal.');
+    }, timeoutMs);
     try {
       const result = await signInWithGoogleIdToken(response.credential);
+      clearTimeout(timeoutId);
       if (result?.error) {
         setError(result.error);
       } else {
         onClose();
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      clearTimeout(timeoutId);
+      setError(err?.message || 'An unexpected error occurred');
     } finally {
       setLoadingProvider(null);
     }

@@ -48,6 +48,11 @@ export default function Home({ reviews, quotes, schedule }) {
     if (allowed) setModal('login');
   };
 
+  // Close login modal as soon as user is set (e.g. from auth state change), so we don't depend only on signInWithGoogleIdToken resolving
+  useEffect(() => {
+    if (user && modal === 'login') setModal(null);
+  }, [user, modal]);
+
   const handleLogout = async () => {
     const { allowed } = await checkActionAllowed('logout');
     if (allowed) logout();

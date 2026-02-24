@@ -77,12 +77,19 @@ export function Authenticator({ children, context }) {
 
   // Login with Google using our domain only (no redirect to supabase.co).
   // Call this with the id_token from Google Identity Services callback.
+  const SIGN_IN_TIMEOUT_MS = 15000;
   const signInWithGoogleIdToken = async (idToken) => {
     try {
-      const { data, error } = await supabase.auth.signInWithIdToken({
+      const signInPromise = supabase.auth.signInWithIdToken({
         provider: 'google',
         token: idToken,
       });
+      const { data, error } = await Promise.race([
+        signInPromise,
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Sign-in timed out. Please try again.')), SIGN_IN_TIMEOUT_MS)
+        ),
+      ]);
 
       if (error) {
         return { error: error.message };
