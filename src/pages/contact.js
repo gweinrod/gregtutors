@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Modal from "../components/Modal";
 import { updateContext } from "../lib/auth";
 import { getRecaptchaSiteKey, executeRecaptcha, checkActionAllowed } from "../lib/recaptcha";
 
@@ -140,8 +141,9 @@ const REACH_OPTIONS = [
 
 export default function ContactPage() {
   const router = useRouter();
-  const { user, logout, context } = updateContext();
+  const { user, logout, context, loginWithProvider, signInWithGoogleIdToken } = updateContext();
 
+  const [loginModal, setLoginModal] = useState(null);
   const [email, setEmail] = useState("");
   const [myName, setMyName] = useState("");
   const [studentName, setStudentName] = useState("");
@@ -160,6 +162,15 @@ export default function ContactPage() {
     const { allowed } = await checkActionAllowed("logout");
     if (allowed) logout();
   };
+
+  const openLoginModal = async () => {
+    const { allowed } = await checkActionAllowed("login");
+    if (allowed) setLoginModal("login");
+  };
+
+  useEffect(() => {
+    if (user && loginModal === "login") setLoginModal(null);
+  }, [user, loginModal]);
 
   useEffect(() => {
     let cancelled = false;
@@ -241,7 +252,7 @@ export default function ContactPage() {
         <meta name="description" content="Contact form for tutoring questions" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </Head>
-      <Header user={user} logout={handleLogout} page="contact" theme={context.theme} />
+      <Header user={user} openModal={openLoginModal} logout={handleLogout} page="contact" theme={context.theme} />
       <main className="content" style={{ padding: 0 }}>
         <div className="cp-root">
           <header className="cp-header">
@@ -402,6 +413,14 @@ export default function ContactPage() {
         </div>
       </main>
       <Footer />
+
+      {loginModal === "login" && (
+        <Modal
+          onClose={() => setLoginModal(null)}
+          loginWithProvider={loginWithProvider}
+          signInWithGoogleIdToken={signInWithGoogleIdToken}
+        />
+      )}
 
       {showSuccessModal && (
         <div className="cp-success-overlay" role="dialog" aria-modal="true" aria-labelledby="cp-success-title">
