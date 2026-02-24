@@ -42,33 +42,41 @@ export function Authenticator({ children, context }) {
 
     getInitialSession();
 
-    // Listen for auth changes
+    // Listen for auth changes.
+    // IMPORTANT: Do not await any Supabase calls inside this callback — it causes a deadlock
+    // (signInWithIdToken never resolves). Set user synchronously, then defer profile/upsert.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         if (session?.user) {
-          const profile = await dataService.getUserProfile(session.user.id);
-          const name = profile?.name || session.user.email;
+          const u = session.user;
           setUser({
-            id: session.user.id,
-            email: session.user.email,
-            name
+            id: u.id,
+            email: u.email,
+            name: u.user_metadata?.full_name || u.user_metadata?.name || u.email
           });
-          await dataService.upsertClient({
-            id: session.user.id,
-            email: session.user.email,
-            name
-          });
-          if (session.access_token && name) {
-            fetch('/api/backfill-schedule-name', {
-              method: 'POST',
-              headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name })
-            }).catch(() => {});
-          }
+          setLoading(false);
+          // Defer all Supabase/API work so this callback returns immediately (avoids deadlock)
+          setTimeout(async () => {
+            try {
+              const profile = await dataService.getUserProfile(u.id);
+              const name = profile?.name || u.user_metadata?.full_name || u.user_metadata?.name || u.email;
+              setUser((prev) => (prev ? { ...prev, name } : null));
+              await dataService.upsertClient({ id: u.id, email: u.email, name });
+              if (session.access_token && name) {
+                fetch('/api/backfill-schedule-name', {
+                  method: 'POST',
+                  headers: { Authorization: `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ name })
+                }).catch(() => {});
+              }
+            } catch (e) {
+              console.error('Post-auth sync:', e);
+            }
+          }, 0);
         } else {
           setUser(null);
+          setLoading(false);
         }
-        setLoading(false);
       }
     );
 
