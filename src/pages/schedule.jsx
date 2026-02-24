@@ -488,32 +488,47 @@ const CSS = `
 .ws-radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
 .ws-radio-label input { width: 18px; height: 18px; accent-color: var(--main-blue); }
 
-/* Mobile: shrink grid to fit all 7 days, reduce padding for horizontal space */
+/* Mobile: force schedule to viewport width so all 7 days fit */
 @media (max-width: 768px) {
-  .ws-root { margin: 0.25rem; }
+  .ws-root { margin: 0.25rem; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-header { padding: 0 12px; }
-  .ws-planner { padding: 0 8px 24px; }
-  .ws-grid-wrap { min-width: 0; }
+  .ws-planner { padding: 0 8px 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
+  .ws-grid-wrap { min-width: 0; width: 100%; max-width: 100%; }
+  .ws-calendar-wrap { width: 100%; max-width: 100%; }
+  .ws-time-grid { width: 100%; max-width: 100%; min-width: 0; }
   .ws-legend { padding: 4px 8px 2px; }
-  .ws-time-labels { width: 44px; }
-  .ws-day-headers { grid-template-columns: 44px repeat(7, minmax(0, 1fr)); }
+  .ws-time-labels { width: 44px; flex-shrink: 0; }
+  .ws-day-headers { grid-template-columns: 44px repeat(7, minmax(0, 1fr)); min-width: 0; }
+  .ws-days-row { grid-template-columns: repeat(7, minmax(0, 1fr)); min-width: 0; }
+  .ws-day-col { min-width: 0; }
   .ws-day-name { font-size: 11px; letter-spacing: 0.06em; }
   .ws-day-num { font-size: 18px; }
   .ws-day-header.today .ws-day-num { width: 28px; height: 28px; font-size: 14px; }
-  .ws-days-row { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-  .ws-day-col { min-width: 0; }
 }
-/* Portrait: even tighter so all 7 days fit on narrow screens */
+/* Portrait: minimal padding, narrow time column, so all 7 days fit */
 @media (max-width: 480px) {
-  .ws-root { margin: 2px; }
-  .ws-header { padding: 0 6px; }
-  .ws-planner { padding: 0 4px 16px; }
+  .ws-root { margin: 0; padding: 0; width: 100%; max-width: 100%; }
+  .ws-header { padding: 0 4px; }
+  .ws-planner { padding: 0 2px 12px; width: 100%; max-width: 100%; }
   .ws-legend { padding: 2px 4px; }
-  .ws-time-labels { width: 36px; }
-  .ws-day-headers { grid-template-columns: 36px repeat(7, minmax(0, 1fr)); }
-  .ws-day-name { font-size: 10px; letter-spacing: 0.04em; }
-  .ws-day-num { font-size: 16px; }
-  .ws-day-header.today .ws-day-num { width: 24px; height: 24px; font-size: 12px; }
+  .ws-time-labels { width: 28px; font-size: 10px; padding-right: 2px; }
+  .ws-day-headers { grid-template-columns: 28px repeat(7, minmax(0, 1fr)); }
+  .ws-day-name { font-size: 9px; letter-spacing: 0.02em; }
+  .ws-day-num { font-size: 14px; }
+  .ws-day-header.today .ws-day-num { width: 22px; height: 22px; font-size: 11px; }
+  .ws-time-slot { padding-right: 2px; font-size: 10px; }
+}
+/* iPhone SE / narrow portrait (e.g. 375px): maximize space for 7 days */
+@media (max-width: 400px) {
+  .ws-planner { padding: 0 0 12px; }
+  .ws-time-labels { width: 24px; font-size: 9px; padding-right: 0; }
+  .ws-day-headers { grid-template-columns: 24px repeat(7, minmax(0, 1fr)); }
+  .ws-day-name { font-size: 8px; letter-spacing: 0; }
+  .ws-day-num { font-size: 13px; }
+  .ws-day-header.today .ws-day-num { width: 20px; height: 20px; font-size: 10px; }
+  .ws-time-slot { padding-right: 0; font-size: 9px; }
+  .ws-header { padding: 0 2px; }
+  .ws-legend { padding: 2px 2px; }
 }
 `;
 
