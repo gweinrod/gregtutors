@@ -311,7 +311,7 @@ const CSS = `
 }
 
 /* PLANNER */
-.ws-planner { padding: 0 32px 40px; overflow-x: auto; }
+.ws-planner { padding: 0 32px 0; overflow-x: auto; }
 .ws-grid-wrap { min-width: 700px; }
 
 /* CALENDAR WRAPPER — border wraps both header and grid together */
@@ -497,7 +497,7 @@ const CSS = `
 @media (max-width: 768px) {
   .ws-root { margin: 0; padding: 0; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-header { padding: 0 8px; }
-  .ws-planner { padding: 0 0 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
+  .ws-planner { padding: 0 0 0; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-grid-wrap { min-width: 0; width: 100%; max-width: 100%; }
   .ws-calendar-wrap { width: 100%; max-width: 100%; min-width: 0; }
   .ws-scroll-grid { min-width: 0; }
@@ -534,7 +534,7 @@ const CSS = `
     border-top: 1px solid var(--border);
   }
   .ws-btn-today, .ws-btn-add { min-width: 0; padding: 6px 12px; font-size: 14px; }
-  .ws-planner { padding: 0 2px 12px; width: 100%; max-width: 100%; }
+  .ws-planner { padding: 0 2px 0; width: 100%; max-width: 100%; }
   .ws-legend { padding: 2px 4px; }
   .ws-time-labels { width: 28px; font-size: 10px; padding-right: 2px; }
   .ws-day-headers { grid-template-columns: 28px repeat(7, minmax(0, 1fr)); }
@@ -546,7 +546,7 @@ const CSS = `
 }
 /* iPhone SE / narrow portrait (e.g. 375px): maximize space for 7 days; keep cells shrinkable */
 @media (max-width: 400px) {
-  .ws-planner { padding: 0 0 12px; }
+  .ws-planner { padding: 0 0 0; }
   .ws-time-labels { width: 24px; font-size: 9px; padding-right: 0; }
   .ws-day-headers { grid-template-columns: 24px repeat(7, minmax(0, 1fr)); }
   .ws-day-name { font-size: 8px; letter-spacing: 0; }
