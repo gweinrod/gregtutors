@@ -496,10 +496,24 @@ const CSS = `
   .ws-grid-wrap { min-width: 0; }
   .ws-legend { padding: 4px 8px 2px; }
   .ws-time-labels { width: 44px; }
-  .ws-day-headers { grid-template-columns: 44px repeat(7, 1fr); }
+  .ws-day-headers { grid-template-columns: 44px repeat(7, minmax(0, 1fr)); }
   .ws-day-name { font-size: 11px; letter-spacing: 0.06em; }
   .ws-day-num { font-size: 18px; }
   .ws-day-header.today .ws-day-num { width: 28px; height: 28px; font-size: 14px; }
+  .ws-days-row { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .ws-day-col { min-width: 0; }
+}
+/* Portrait: even tighter so all 7 days fit on narrow screens */
+@media (max-width: 480px) {
+  .ws-root { margin: 2px; }
+  .ws-header { padding: 0 6px; }
+  .ws-planner { padding: 0 4px 16px; }
+  .ws-legend { padding: 2px 4px; }
+  .ws-time-labels { width: 36px; }
+  .ws-day-headers { grid-template-columns: 36px repeat(7, minmax(0, 1fr)); }
+  .ws-day-name { font-size: 10px; letter-spacing: 0.04em; }
+  .ws-day-num { font-size: 16px; }
+  .ws-day-header.today .ws-day-num { width: 24px; height: 24px; font-size: 12px; }
 }
 `;
 
