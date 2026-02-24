@@ -725,7 +725,7 @@ body:has(.page-schedule) .grecaptcha-badge {
 }
 .schedule-recaptcha-disclaimer {
   margin: 0;
-  padding: 12px 8px 16px;
+  padding: 12px 8px 4px;
   font-size: 11px;
   color: var(--ink-faint, #888);
   text-align: center;
