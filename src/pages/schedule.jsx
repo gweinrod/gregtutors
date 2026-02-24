@@ -488,22 +488,26 @@ const CSS = `
 .ws-radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; font-weight: 500; }
 .ws-radio-label input { width: 18px; height: 18px; accent-color: var(--main-blue); }
 
-/* Mobile: force schedule to viewport width so all 7 days fit */
+/* Mobile: force schedule to viewport width so all 7 days fit; allow cells to shrink */
 @media (max-width: 768px) {
   .ws-root { margin: 0.25rem; width: 100%; max-width: 100%; box-sizing: border-box; }
   .ws-header { padding: 0 12px; }
   .ws-planner { padding: 0 8px 24px; width: 100%; max-width: 100%; box-sizing: border-box; }
-  .ws-grid-wrap { min-width: 0; width: 100%; max-width: 100%; }
-  .ws-calendar-wrap { width: 100%; max-width: 100%; }
+  /* Override base min-width: 700px so grid can shrink to viewport */
+  .ws-grid-wrap { min-width: 0 !important; width: 100%; max-width: 100%; }
+  .ws-calendar-wrap { width: 100%; max-width: 100%; min-width: 0; }
+  .ws-scroll-grid { min-width: 0; }
   .ws-time-grid { width: 100%; max-width: 100%; min-width: 0; }
   .ws-legend { padding: 4px 8px 2px; }
   .ws-time-labels { width: 44px; flex-shrink: 0; }
   .ws-day-headers { grid-template-columns: 44px repeat(7, minmax(0, 1fr)); min-width: 0; }
+  .ws-day-header { min-width: 0; overflow: hidden; }
   .ws-days-row { grid-template-columns: repeat(7, minmax(0, 1fr)); min-width: 0; }
   .ws-day-col { min-width: 0; }
   .ws-day-name { font-size: 11px; letter-spacing: 0.06em; }
   .ws-day-num { font-size: 18px; }
   .ws-day-header.today .ws-day-num { width: 28px; height: 28px; font-size: 14px; }
+  .ws-event-title { font-size: 11px; }
 }
 /* Portrait: minimal padding, narrow time column, so all 7 days fit */
 @media (max-width: 480px) {
@@ -517,8 +521,9 @@ const CSS = `
   .ws-day-num { font-size: 14px; }
   .ws-day-header.today .ws-day-num { width: 22px; height: 22px; font-size: 11px; }
   .ws-time-slot { padding-right: 2px; font-size: 10px; }
+  .ws-event-title { font-size: 10px; }
 }
-/* iPhone SE / narrow portrait (e.g. 375px): maximize space for 7 days */
+/* iPhone SE / narrow portrait (e.g. 375px): maximize space for 7 days; keep cells shrinkable */
 @media (max-width: 400px) {
   .ws-planner { padding: 0 0 12px; }
   .ws-time-labels { width: 24px; font-size: 9px; padding-right: 0; }
@@ -529,6 +534,7 @@ const CSS = `
   .ws-time-slot { padding-right: 0; font-size: 9px; }
   .ws-header { padding: 0 2px; }
   .ws-legend { padding: 2px 2px; }
+  .ws-event-title { font-size: 9px; }
 }
 `;
 
