@@ -719,16 +719,21 @@ body.dark .modal .submit:hover {
   }
 }
 
-/* reCAPTCHA badge container: place badge below the timetable on schedule page */
-.schedule-recaptcha-badge-container {
-  position: relative;
-  min-height: 70px;
-  width: 100%;
+/* Schedule page: hide default reCAPTCHA badge (we show the disclaimer below the timetable instead) */
+body:has(.page-schedule) .grecaptcha-badge {
+  visibility: hidden !important;
 }
-.schedule-recaptcha-badge-container .grecaptcha-badge {
-  position: absolute !important;
-  bottom: 0 !important;
-  right: 0 !important;
-  top: auto !important;
-  left: auto !important;
+.schedule-recaptcha-disclaimer {
+  margin: 0;
+  padding: 12px 8px 16px;
+  font-size: 11px;
+  color: var(--ink-faint, #888);
+  text-align: center;
+  line-height: 1.4;
+}
+.schedule-recaptcha-disclaimer a {
+  color: var(--light-accent-primary, #000080);
+}
+body.dark .schedule-recaptcha-disclaimer a {
+  color: var(--dark-accent-secondary, #ffd700);
 }
