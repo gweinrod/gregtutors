@@ -671,11 +671,13 @@ body.dark .modal .submit:hover {
 @media (max-width: 768px) {
   .site-header {
     flex-direction: column;
+    height: auto;
+    min-height: 68px;
     padding: 1rem;
   }
   
   .site-header .logo {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   
   .main-nav ul {
@@ -685,7 +687,7 @@ body.dark .modal .submit:hover {
   }
   
   .auth-controls {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
   }
   
   .content {
